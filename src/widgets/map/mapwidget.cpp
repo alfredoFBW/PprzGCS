@@ -1311,7 +1311,11 @@ void MapWidget::onGVF(QString sender, pprzlink::Message msg) {
                 break;
             }
             case 3: { // Bezier 2D
-                gvf_traj = new GVF_traj_bezier(sender, param, phi, wb, gvf_trajectories_config[sender]);
+                gvf_traj = new GVF_traj_bezier(sender, param, phi, wb, 3, gvf_trajectories_config[sender]);
+                break;
+            }
+            case 4: { // Quinti Bezier 2D
+                gvf_traj = new GVF_traj_bezier(sender, param, phi, wb, 5, gvf_trajectories_config[sender]);
                 break;
             }
             default:
