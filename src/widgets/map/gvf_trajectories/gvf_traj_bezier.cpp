@@ -171,6 +171,7 @@ QPointF GVF_traj_bezier::eval_traj(float t, int p){
   }
 
   int k = (int)t;
+  int auxi = (int)t;
 
   /* Each Bézier spline must be evaluated between 0 and 1.
   Remove integer part, get fractional
