@@ -14,6 +14,7 @@
 #include <QFileInfo>
 #include <pprzmain.h>
 #include "gcs_utils.h"
+#include "globalconfig.h"
 
 void default_setting(QString key, QVariant value) {
     auto settings = getAppSettings();
@@ -106,8 +107,15 @@ SettingsEditor::SettingsEditor(bool standalone, QWidget* parent): QDialog(parent
     auto w_map = new QWidget(tabWidget);
     auto l_map = new QGridLayout(w_map);
     row = 0;
-    cb = addSetting("Default tiles", "map/default_tiles", w_map, l_map, row, Type::STRING);
-    callbacks.append(cb);
+
+    QVariant tpnv = GlobalConfig::get()->value("tile_providers_names");
+    if(tpnv.isValid()) {
+        cb = addSetting("Default tiles", "map/default_tiles", w_map, l_map, row, Type::STRING_COMBO, tpnv.toStringList());
+        callbacks.append(cb);
+    } else {
+        cb = addSetting("Default tiles", "map/default_tiles", w_map, l_map, row, Type::STRING);
+        callbacks.append(cb);
+    }
     cb = addSetting("Waypoint Size", "map/waypoint/size", w_map, l_map, row, Type::INT);
     callbacks.append(cb);
     cb = addSetting("Items Font", "map/items_font", w_map, l_map, row, Type::INT);
@@ -130,7 +138,10 @@ SettingsEditor::SettingsEditor(bool standalone, QWidget* parent): QDialog(parent
     auto w_general = new QWidget(tabWidget);
     auto l_general = new QGridLayout(w_general);
     row = 0;
-    cb = addSetting("Layout", "APP_LAYOUT_FILE", w_general, l_general, row, Type::PATH_FILE);
+
+    auto user_layout_files = getLayoutFiles("USER_DATA_PATH");
+    auto app_layout_files = getLayoutFiles("APP_DATA_PATH");
+    cb = addSetting("Layout", "APP_LAYOUT_FILE", w_general, l_general, row, Type::STRING_COMBO, user_layout_files + app_layout_files);
     callbacks.append(cb);
     cb = addSetting("Style", "APP_STYLE_FILE", w_general, l_general, row, Type::PATH_FILE);
     callbacks.append(cb);
@@ -165,7 +176,7 @@ SettingsEditor::SettingsEditor(bool standalone, QWidget* parent): QDialog(parent
 }
 
 
-std::function<void()> SettingsEditor::addSetting(QString name, QString key, QWidget* w, QGridLayout* gl, int &row, Type type) {
+std::function<void()> SettingsEditor::addSetting(QString name, QString key, QWidget* w, QGridLayout* gl, int &row, Type type, QVariant data) {
     auto settings = getAppSettings();
     auto label = new QLabel(name, w);
 
@@ -248,7 +259,21 @@ std::function<void()> SettingsEditor::addSetting(QString name, QString key, QWid
         };
 
         return cb;
-    } else {
+    } else if(type == Type::STRING_COMBO) {
+        auto combo = new QComboBox(w);
+        combo->addItems(data.toStringList());
+        auto current = settings.value(key).toString();
+        combo->setCurrentText(current);
+        gl->addWidget(combo, r, 1);
+
+        auto cb = [=]() {
+            auto settings = getAppSettings();
+            settings.setValue(key, combo->currentText());
+        };
+
+        return cb;
+    }
+    else {
         throw std::runtime_error("Error: Setting type not handled !");
     }
 }
