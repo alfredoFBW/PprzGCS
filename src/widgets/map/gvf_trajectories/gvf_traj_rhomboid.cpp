@@ -51,9 +51,9 @@ void GVF_traj_rhomboid::genVField() {
     QList<QPointF> vxy_mesh; 
 
   
-    float bound_area = 2*r; // to scale the arrows
+    float bound_area = 1200; // to scale the arrows
 
-    emit DispatcherUi::get()->gvf_defaultFieldSettings(ac_id, round(bound_area), 25, 25);
+    emit DispatcherUi::get()->gvf_defaultFieldSettings(ac_id, round(bound_area), 50, 50);
     xy_mesh = meshGrid();
     
     // Rotate the space -alpha deg, draw the rhomboid vector field for each point in the mesh and then
