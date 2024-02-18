@@ -34,6 +34,7 @@
 #include "gvf_traj_line.h"
 #include "gvf_traj_ellipse.h"
 #include "gvf_traj_sin.h"
+#include "gvf_traj_rhomboid.h"
 #include "gvf_traj_trefoil.h"
 #include "gvf_traj_3D_ellipse.h"
 #include "gvf_traj_3D_lissajous.h"
@@ -1281,6 +1282,10 @@ void MapWidget::onGVF(QString sender, pprzlink::Message msg) {
                 gvf_traj = new GVF_traj_sin(sender, param, direction, ke, gvf_trajectories_config[sender]);
                 break;
             }
+            case 4: { // Rhomboid 
+                gvf_traj = new GVF_traj_rhomboid(sender, param, direction, ke, gvf_trajectories_config[sender]);
+                break;
+            }
             default:
                 qDebug() << "GVF: GVF message parser received an unknown trajectory id.";
                 return;
@@ -1314,7 +1319,7 @@ void MapWidget::onGVF(QString sender, pprzlink::Message msg) {
                 gvf_traj = new GVF_traj_bezier(sender, param, phi, wb, 3, gvf_trajectories_config[sender]);
                 break;
             }
-            case 4: { // Quinti Bezier 2D
+            case 4: { // Quintic Bezier 2D
                 gvf_traj = new GVF_traj_bezier(sender, param, phi, wb, 5, gvf_trajectories_config[sender]);
                 break;
             }
