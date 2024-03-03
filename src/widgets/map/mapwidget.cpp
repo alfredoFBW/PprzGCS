@@ -35,6 +35,7 @@
 #include "gvf_traj_ellipse.h"
 #include "gvf_traj_sin.h"
 #include "gvf_traj_rhomboid.h"
+#include "gvf_traj_square.h"
 #include "gvf_traj_trefoil.h"
 #include "gvf_traj_3D_ellipse.h"
 #include "gvf_traj_3D_lissajous.h"
@@ -1284,6 +1285,10 @@ void MapWidget::onGVF(QString sender, pprzlink::Message msg) {
             }
             case 4: { // Rhomboid 
                 gvf_traj = new GVF_traj_rhomboid(sender, param, direction, ke, gvf_trajectories_config[sender]);
+                break;
+            }
+            case 5: { // Square
+                gvf_traj = new GVF_traj_square(sender, param, direction, ke, gvf_trajectories_config[sender]);
                 break;
             }
             default:
