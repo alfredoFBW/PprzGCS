@@ -31,6 +31,16 @@ void GVF_traj_square::genTraj() {
     float x_off[4] = {r, -r, -r, r};
     float y_off[4] = {r, r,  -r, -r};
 
+    float aux1, aux2;
+    /*
+    // If we rotate it we have a rotated square !
+    for(int i = 0; i < 4; i++){
+        aux1 = x_off[i] * cosf(3.14/6) + y_off[i] * sinf(3.14/6);
+        aux2 = -x_off[i] * sinf(3.14/6) + y_off[i] * cosf(3.14/6);
+        x_off[i] = aux1;
+        y_off[i] = aux2;
+    }
+    */
     float dt = 0.01;
     int aux = 0;
     float x, y;
